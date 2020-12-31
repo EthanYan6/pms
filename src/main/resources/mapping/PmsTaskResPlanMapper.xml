@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：xml文件对应的接口类名-->
+<mapper namespace="com.buaa.pms.mapper.PmsTaskResPlanMapper">
+
+    <!--数据库表字段与Java对象属性的映射关系-->
+    <resultMap id="pmsTaskResPlanMap" type="PmsTaskResPlan">
+        <result property="resPlanUid" column="resplan_uid"/>
+        <result property="resPlanId" column="resplan_id"/>
+        <result property="resPlanProjUid" column="resplan_proj_uid"/>
+        <result property="resPlanProcUid" column="resplan_proc_uid"/>
+        <result property="resPlanTaskUid" column="resplan_task_uid"/>
+        <result property="resPlanPriority" column="resplan_priority"/>
+    </resultMap>
+
+    <!--sql语句对应的接口方法名-->
+    <select id="selectAll" resultMap="pmsTaskResPlanMap">
+        select * from pms_task_resplan
+    </select>
+
+    <select id="selectByProjUid" resultMap="pmsTaskResPlanMap">
+        select * from pms_task_resplan where resplan_proj_uid = #{resPlanProjUid}
+    </select>
+
+    <select id="selectByProcUidList" resultMap="pmsTaskResPlanMap">
+        select * from pms_task_resplan where resplan_proc_uid in
+        <foreach collection="list" open="(" separator="," close=")" item="procUid">
+            #{procUid}
+        </foreach>
+    </select>
+
+    <select id="selectByProcUid" resultMap="pmsTaskResPlanMap">
+        select * from pms_task_resplan where resplan_proc_uid = #{resPlanProcUid}
+    </select>
+
+    <select id="selectByTaskUid" resultMap="pmsTaskResPlanMap">
+        select * from pms_task_resplan where resplan_task_uid = #{resPlanTaskUid}
+    </select>
+
+    <select id="selectByUid" resultMap="pmsTaskResPlanMap">
+        select * from pms_task_resplan where resplan_uid = #{resPlanUid}
+    </select>
+
+    <insert id="save" parameterType="PmsTaskResPlan">
+        insert into pms_task_resplan
+        (resplan_uid, resplan_id, resplan_proj_uid, resplan_proc_uid, resplan_task_uid, resplan_priority)
+        values
+        (#{resPlanUid}, #{resPlanId}, #{resPlanProjUid}, #{resPlanProcUid}, #{resPlanTaskUid}, #{resPlanPriority})
+    </insert>
+
+    <delete id="deleteByUid">
+        delete from pms_task_resplan where resplan_uid = #{resPlanUid}
+    </delete>
+
+    <delete id="deleteByTaskUid">
+        delete from pms_task_resplan where resplan_task_uid = #{resPlanTaskUid}
+    </delete>
+
+    <delete id="deleteByProcUid">
+        delete from pms_task_resplan where resplan_proc_uid = #{resPlanProcUid}
+    </delete>
+
+    <delete id="deleteByProjUid">
+        delete from pms_task_resplan where resplan_proj_uid = #{resPlanProjUid}
+    </delete>
+    
+    <update id="update" parameterType="PmsTaskResPlan">
+        update pms_task_resplan set
+        resplan_id = #{resPlanId}, resplan_proj_uid = #{resPlanProjUid}, resplan_proc_uid = #{resPlanProcUid},
+        resplan_task_uid = #{resPlanTaskUid}, resplan_priority = #{resPlanPriority}
+        where resplan_uid = #{resPlanUid}
+    </update>
+
+    <update id="updatePmsTaskResPlans" parameterType="java.util.List">
+        <foreach collection="list" item="plan" index="index" open="" close="" separator=";">
+            update pms_task_resplan set
+            resplan_id = #{plan.resPlanId}, resplan_proj_uid = #{plan.resPlanProjUid}, resplan_proc_uid = #{plan.resPlanProcUid},
+            resplan_task_uid = #{plan.resPlanTaskUid}, resplan_priority = #{plan.resPlanPriority}
+            where resplan_uid = #{plan.resPlanUid}
+        </foreach>
+    </update>
+
+</mapper>

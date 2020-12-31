@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：xml文件对应的接口类名-->
+<mapper namespace="com.buaa.pms.mapper.PmsTaskResReqMapper">
+
+    <!--数据库表字段与Java对象属性的映射关系-->
+    <resultMap id="pmsTaskResReqMap" type="PmsTaskResReq">
+        <result property="resReqUid" column="resreq_uid"/>
+        <result property="resReqId" column="resreq_id"/>
+        <result property="resReqResPlanUid" column="resreq_resplan_uid"/>
+        <result property="resReqProjUid" column="resreq_proj_uid"/>
+        <result property="resReqProcUid" column="resreq_proc_uid"/>
+        <result property="resReqTaskUid" column="resreq_task_uid"/>
+        <result property="resReqResType" column="resreq_res_type"/>
+        <result property="resReqResUid" column="resreq_res_uid"/>
+        <result property="resReqResStartDateTime" column="resreq_res_startdatetime"/>
+        <result property="resReqResFinishDateTime" column="resreq_res_finishdatetime"/>
+        <result property="resReqResWork" column="resreq_res_work"/>
+        <result property="resReqResWorkModel" column="resreq_res_workmodel"/>
+        <result property="resReqResAmount" column="resreq_res_amount"/>
+    </resultMap>
+
+    <!--sql语句对应的接口方法名-->
+    <select id="selectAll" resultMap="pmsTaskResReqMap">
+        select * from pms_task_resreq
+    </select>
+
+    <select id="selectByProjUid" resultMap="pmsTaskResReqMap">
+        select * from pms_task_resreq where resreq_proj_uid = #{resReqProjUid}
+    </select>
+
+    <select id="selectByProcUid" resultMap="pmsTaskResReqMap">
+        select * from pms_task_resreq where resreq_proc_uid = #{resReqProcUid}
+    </select>
+
+    <select id="selectByProcUidList" resultMap="pmsTaskResReqMap">
+        select * from pms_task_resreq where resreq_proc_uid in
+        <foreach collection="list" open="(" separator="," close=")" item="procUid">
+            #{procUid}
+        </foreach>
+    </select>
+
+    <select id="selectByTaskUid" resultMap="pmsTaskResReqMap">
+        select * from pms_task_resreq where resreq_task_uid = #{resReqTaskUid}
+    </select>
+
+    <select id="selectByResReqResPlanUid" resultMap="pmsTaskResReqMap">
+        select * from pms_task_resreq where resreq_resplan_uid = #{resReqResPlanUid}
+    </select>
+
+    <select id="selectByUid" resultMap="pmsTaskResReqMap">
+        select * from pms_task_resreq where resreq_uid = #{resReqUid}
+    </select>
+
+    <insert id="save" parameterType="PmsTaskResReq">
+        insert into pms_task_resreq
+        (resreq_uid, resreq_id, resreq_resplan_uid, resreq_proj_uid, resreq_proc_uid, resreq_task_uid, resreq_res_type, resreq_res_uid, resreq_res_startdatetime,
+        resreq_res_finishdatetime, resreq_res_work, resreq_res_workmodel, resreq_res_amount)
+        values
+        (#{resReqUid}, #{resReqId}, #{resReqResPlanUid}, #{resReqProjUid}, #{resReqProcUid}, #{resReqTaskUid}, #{resReqResType}, #{resReqResUid}, #{resReqResStartDateTime},
+        #{resReqResFinishDateTime}, #{resReqResWork}, #{resReqResWorkModel}, #{resReqResAmount})
+    </insert>
+
+    <delete id="deleteByUid">
+        delete from pms_task_resreq where resreq_uid = #{resReqUid}
+    </delete>
+
+    <delete id="deleteByResReqResPlanUid">
+        delete from pms_task_resreq where resreq_resplan_uid = #{resReqResPlanUid}
+    </delete>
+
+    <delete id="deleteByTaskUid">
+        delete from pms_task_resreq where resreq_task_uid = #{resReqTaskUid}
+    </delete>
+
+    <delete id="deleteByProcUid">
+        delete from pms_task_resreq where resreq_proc_uid = #{resReqProcUid}
+    </delete>
+
+    <delete id="deleteByProjUid">
+        delete from pms_task_resreq where resreq_proj_uid = #{resReqProjUid}
+    </delete>
+    
+    <update id="update" parameterType="PmsTaskResReq">
+        update pms_task_resreq set
+        resreq_id = #{resReqId}, resreq_resplan_uid = #{resReqResPlanUid}, resreq_proj_uid = #{resReqProjUid}, resreq_proc_uid = #{resReqProcUid}, resreq_task_uid = #{resReqTaskUid},
+        resreq_res_type = #{resReqResType}, resreq_res_uid = #{resReqResUid}, resreq_res_startdatetime = #{resReqResStartDateTime},
+        resreq_res_finishdatetime = #{resReqResFinishDateTime}, resreq_res_work = #{resReqResWork}, resreq_res_workmodel = #{resReqResWorkModel},
+        resreq_res_amount = #{resReqResAmount}
+        where resreq_uid = #{resReqUid}
+    </update>
+
+    <update id="updatePmsTaskResReqs" parameterType="java.util.List">
+        <foreach collection="list" item="resReq" index="index" open="" close="" separator=";">
+            update pms_task_resreq set
+            resreq_id = #{resReq.resReqId}, resreq_resplan_uid = #{resReq.resReqResPlanUid}, resreq_proj_uid = #{resReq.resReqProjUid},
+            resreq_proc_uid = #{resReq.resReqProcUid}, resreq_task_uid = #{resReq.resReqTaskUid}, resreq_res_type = #{resReq.resReqResType},
+            resreq_res_uid = #{resReq.resReqResUid}, resreq_res_startdatetime = #{resReq.resReqResStartDateTime},
+            resreq_res_finishdatetime = #{resReq.resReqResFinishDateTime}, resreq_res_work = #{resReq.resReqResWork},
+            resreq_res_workmodel = #{resReq.resReqResWorkModel}, resreq_res_amount = #{resReq.resReqResAmount}
+            where resreq_uid = #{resReq.resReqUid}
+        </foreach>
+    </update>
+
+</mapper>

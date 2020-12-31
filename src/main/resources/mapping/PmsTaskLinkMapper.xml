@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：xml文件对应的接口类名-->
+<mapper namespace="com.buaa.pms.mapper.PmsTaskLinkMapper">
+
+    <!--数据库表字段与Java对象属性的映射关系-->
+    <resultMap id="pmsTaskLinkMap" type="PmsTaskLink">
+        <result property="taskLinkUid" column="tasklink_uid"/>
+        <result property="taskLinkPreTaskUid" column="tasklink_pretask_uid"/>
+        <result property="taskLinkSucTaskUid" column="tasklink_suctask_uid"/>
+        <result property="taskLinkType" column="tasklink_type"/>
+        <result property="taskLinkProjUid" column="tasklink_proj_uid"/>
+        <result property="taskLinkProcUid" column="tasklink_proc_uid"/>
+    </resultMap>
+
+    <!--sql语句对应的接口方法名-->
+    <select id="selectAll" resultMap="pmsTaskLinkMap">
+        select * from pms_task_link
+    </select>
+
+    <select id="selectByProjUid" resultMap="pmsTaskLinkMap">
+        select * from pms_task_link where tasklink_proj_uid = #{taskLinkProjUid}
+    </select>
+
+    <select id="selectByProcUidList" resultMap="pmsTaskLinkMap">
+        select * from pms_task_link where tasklink_proc_uid in
+        <foreach collection="list" open="(" separator="," close=")" item="procUid">
+            #{procUid}
+        </foreach>
+    </select>
+
+    <select id="selectByProcUid" resultMap="pmsTaskLinkMap">
+        select * from pms_task_link where tasklink_proc_uid = #{taskLinkProcUid}
+    </select>
+
+    <select id="selectByUid" resultMap="pmsTaskLinkMap">
+        select * from pms_task_link where tasklink_uid = #{taskLinkUid}
+    </select>
+
+    <select id="selectByTaskUid" resultMap="pmsTaskLinkMap">
+        select * from pms_task_link where tasklink_pretask_uid = #{taskLinkTaskUid} or tasklink_suctask_uid = #{taskLinkTaskUid}
+    </select>
+
+    <select id="selectByPreTaskUid" resultMap="pmsTaskLinkMap">
+        select * from pms_task_link where tasklink_pretask_uid = #{taskLinkPreTaskUid}
+    </select>
+
+    <select id="selectBySucTaskUid" resultMap="pmsTaskLinkMap">
+        select * from pms_task_link where tasklink_suctask_uid = #{taskLinkSucTaskUid}
+    </select>
+
+    <insert id="save" parameterType="PmsTaskLink">
+        insert into pms_task_link
+        (tasklink_uid, tasklink_pretask_uid, tasklink_suctask_uid, tasklink_type, tasklink_proj_uid, tasklink_proc_uid)
+        values
+        (#{taskLinkUid}, #{taskLinkPreTaskUid}, #{taskLinkSucTaskUid}, #{taskLinkType}, #{taskLinkProjUid}, #{taskLinkProcUid})
+    </insert>
+
+    <insert id="saveTaskLinks" parameterType="java.util.List">
+        insert into pms_task_link
+        (tasklink_uid, tasklink_pretask_uid, tasklink_suctask_uid, tasklink_type, tasklink_proj_uid, tasklink_proc_uid)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.taskLinkUid}, #{item.taskLinkPreTaskUid}, #{item.taskLinkSucTaskUid}, #{item.taskLinkType}, #{item.taskLinkProjUid}, #{item.taskLinkProcUid})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByUid">
+        delete from pms_task_link where tasklink_uid = #{taskLinkUid}
+    </delete>
+
+    <delete id="deleteByPreTaskUid">
+        delete from pms_task_link where tasklink_pretask_uid = #{taskLinkPreTaskUid}
+    </delete>
+
+    <delete id="deleteBySucTaskUid">
+        delete from pms_task_link where tasklink_suctask_uid = #{taskLinkSucTaskUid}
+    </delete>
+
+    <delete id="deleteByTaskUid">
+        delete from pms_task_link where tasklink_pretask_uid = #{taskLinkTaskUid} or tasklink_suctask_uid = #{taskLinkTaskUid}
+    </delete>
+
+    <delete id="deleteByProcUid">
+        delete from pms_task_link where tasklink_proc_uid = #{taskLinkProcUid}
+    </delete>
+
+    <delete id="deleteByProjUid">
+        delete from pms_task_link where tasklink_proj_uid = #{taskLinkProjUid}
+    </delete>
+    
+    <update id="update" parameterType="PmsTaskLink">
+        update pms_task_link set
+        tasklink_pretask_uid = #{taskLinkPreTaskUid}, tasklink_suctask_uid = #{taskLinkSucTaskUid}, tasklink_type = #{taskLinkType},
+        tasklink_proj_uid = #{taskLinkProjUid}, tasklink_proc_uid = #{taskLinkProcUid}
+        where tasklink_uid = #{taskLinkUid}
+    </update>
+
+    <update id="updateTaskLinks" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update pms_task_link set
+            tasklink_pretask_uid = #{item.taskLinkPreTaskUid}, tasklink_suctask_uid = #{item.taskLinkSucTaskUid}, tasklink_type = #{item.taskLinkType},
+            tasklink_proj_uid = #{item.taskLinkProjUid}, tasklink_proc_uid = #{item.taskLinkProcUid}
+            where tasklink_uid = #{item.taskLinkUid}
+        </foreach>
+    </update>
+
+</mapper>

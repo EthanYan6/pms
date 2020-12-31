@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：xml文件对应的接口类名-->
+<mapper namespace="com.buaa.pms.mapper.PmsPlaceMapper">
+
+    <!--数据库表字段与Java对象属性的映射关系-->
+    <resultMap id="pmsPlaceMap" type="PmsPlace">
+        <result property="placeUid" column="place_uid"/>
+        <result property="placeId" column="place_id"/>
+        <result property="placeName" column="place_name"/>
+        <result property="placeOrgUid" column="place_org_uid"/>
+        <result property="placeType" column="place_type"/>
+        <result property="placeArea" column="place_area"/>
+        <result property="placeDesc" column="place_desc"/>
+    </resultMap>
+
+    <!--sql语句对应的接口方法名-->
+    <select id="selectAll" resultMap="pmsPlaceMap">
+        select * from pms_place
+    </select>
+
+    <select id="selectByOrgUid" resultMap="pmsPlaceMap">
+        select * from pms_place where place_org_uid = #{placeOrgUid}
+    </select>
+
+    <select id="selectByUid" resultMap="pmsPlaceMap">
+        select * from pms_place where place_uid = #{placeUid}
+    </select>
+
+    <insert id="save" parameterType="PmsPlace">
+        insert into pms_place
+        (place_uid, place_id, place_name, place_org_uid, place_type, place_area, place_desc)
+        values
+        (#{placeUid}, #{placeId}, #{placeName}, #{placeOrgUid}, #{placeType}, #{placeArea}, #{placeDesc})
+    </insert>
+
+    <delete id="deleteByUid">
+        delete from pms_place where place_uid = #{placeUid}
+    </delete>
+    
+    <update id="update" parameterType="PmsPlace">
+        update pms_place set
+        place_id = #{placeId}, place_name = #{placeName}, place_org_uid = #{placeOrgUid}, place_type = #{placeType},
+        place_area = #{placeArea}, place_desc = #{placeDesc}
+        where place_uid = #{placeUid}
+    </update>
+
+</mapper>

@@ -1,0 +1,48 @@
+#指定服务部署端口
+server:
+  port: 8090
+
+spring:
+
+  datasource: #定义数据源
+    name: pms
+    url: jdbc:mysql://localhost:3306/pms?characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2B8&zeroDateTimeBehavior=CONVERT_TO_NULL&allowMultiQueries=true
+    username: root  #数据库用户名，root为管理员
+    password: castztb2018@ #该数据库用户的密码
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    type: com.alibaba.druid.pool.DruidDataSource  #使用druid连接池
+    # 下面为连接池的补充设置，应用到上面所有数据源中
+    # 初始化大小，最小，最大
+    initialSize: 1
+    minIdle: 3
+    maxActive: 20
+    # 配置获取连接等待超时的时间
+    maxWait: 60000
+    # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    timeBetweenEvictionRunsMillis: 60000
+    # 配置一个连接在池中最小生存的时间，单位是毫秒
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    # 打开PSCache，并且指定每个连接上PSCache的大小
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+
+  thymeleaf:
+  cache: false
+
+  mvc:
+    static-path-pattern: /**
+
+mybatis:  #mybatyis的配置
+  mapper-locations: classpath:mapping/*.xml #指定mapper的配置文件的路径是mapping文件夹下的所有 xml文件。
+
+  #配置对象别名，mapper中可以不指定包路径
+  typeAliasesPackage: com.buaa.pms.entity
+  #执行的sql打印到控制台
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+

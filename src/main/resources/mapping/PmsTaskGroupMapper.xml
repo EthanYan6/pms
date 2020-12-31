@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：xml文件对应的接口类名-->
+<mapper namespace="com.buaa.pms.mapper.PmsTaskGroupMapper">
+
+    <!--数据库表字段与Java对象属性的映射关系-->
+    <resultMap id="pmsTaskGroupMap" type="PmsTaskGroup">
+        <result property="taskGroupUid" column="task_group_uid"/>
+        <result property="taskGroupTaskUid" column="task_group_taskuid"/>
+        <result property="taskGroupGroupUid" column="task_group_groupuid"/>
+        <result property="taskGroupProjUid" column="task_group_projuid"/>
+        <result property="taskGroupProcUid" column="task_group_procuid"/>
+    </resultMap>
+
+    <!--sql语句对应的接口方法名-->
+    <select id="selectAll" resultMap="pmsTaskGroupMap">
+        select * from pms_task_group
+    </select>
+
+    <select id="selectByProjUid" resultMap="pmsTaskGroupMap">
+        select * from pms_task_group where task_group_projuid = #{taskGroupProjUid}
+    </select>
+
+    <select id="selectByProcUidList" resultMap="pmsTaskGroupMap">
+        select * from pms_task_group where task_group_procuid in
+        <foreach collection="list" open="(" separator="," close=")" item="procUid">
+            #{procUid}
+        </foreach>
+    </select>
+
+    <select id="selectByProcUid" resultMap="pmsTaskGroupMap">
+        select * from pms_task_group where task_group_procuid = #{taskGroupProcUid}
+    </select>
+
+    <select id="selectByGroupUid" resultMap="pmsTaskGroupMap">
+        select * from pms_task_group where task_group_groupuid = #{taskGroupGroupUid}
+    </select>
+
+    <select id="selectByUid" resultMap="pmsTaskGroupMap">
+        select * from pms_task_group where task_group_uid = #{taskGroupUid}
+    </select>
+
+    <select id="selectByTaskUid" resultMap="pmsTaskGroupMap">
+        select * from pms_task_group where task_group_taskuid = #{taskGroupTaskUid}
+    </select>
+
+    <insert id="save" parameterType="PmsTaskGroup">
+        insert into pms_task_group
+        (task_group_uid, task_group_taskuid, task_group_groupuid, task_group_procuid, task_group_projuid)
+        values
+        (#{taskGroupUid}, #{taskGroupTaskUid}, #{taskGroupGroupUid}, #{taskGroupProcUid}, #{taskGroupProjUid})
+    </insert>
+
+    <insert id="saveTaskGroups" parameterType="java.util.List">
+        insert into pms_task_group
+        (task_group_uid, task_group_taskuid, task_group_groupuid, task_group_procuid, task_group_projuid)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{taskGroupUid}, #{taskGroupTaskUid}, #{taskGroupGroupUid}, #{taskGroupProcUid}, #{taskGroupProjUid})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByUid">
+        delete from pms_task_group where task_group_uid = #{taskGroupUid}
+    </delete>
+
+    <delete id="deleteByTaskUid">
+        delete from pms_task_group where task_group_taskuid = #{taskGroupTaskUid}
+    </delete>
+
+    <delete id="deleteByGroupUid">
+        delete from pms_task_group where task_group_groupuid = #{taskGroupGroupUid}
+    </delete>
+
+    <delete id="deleteByProcUid">
+        delete from pms_task_group where task_group_procuid = #{taskGroupProcUid}
+    </delete>
+
+    <delete id="deleteByProjUid">
+        delete from pms_task_group where task_group_projuid = #{taskGroupProjUid}
+    </delete>
+    
+    <update id="update" parameterType="PmsTaskGroup">
+        update pms_task_group set
+        task_group_taskuid = #{taskGroupTaskUid}, task_group_groupuid = #{taskGroupGroupUid}, task_group_procuid = #{taskGroupProcUid}, task_group_projuid = #{taskGroupProjUid}
+        where task_group_uid = #{taskGroupUid}
+    </update>
+
+    <update id="updateTaskGroups" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update pms_task_group set
+            task_group_taskuid = #{item.taskGroupTaskUid}, task_group_groupuid = #{item.taskGroupGroupUid}, task_group_procuid = #{item.taskGroupProcUid}, task_group_projuid = #{item.taskGroupProjUid}
+            where task_group_uid = #{item.taskGroupUid}
+        </foreach>
+    </update>
+
+</mapper>

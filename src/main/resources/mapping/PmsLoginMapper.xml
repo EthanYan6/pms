@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：xml文件对应的接口类名-->
+<mapper namespace="com.buaa.pms.mapper.PmsLoginMapper">
+
+    <!--数据库表字段与Java对象属性的映射关系-->
+    <resultMap id="pmsLoginMap" type="PmsUser">
+        <result property="userUid" column="user_uid"/>
+        <result property="username" column="user_name"/>
+        <result property="password" column="password"/>
+    </resultMap>
+
+    <!--sql语句对应的接口方法名-->
+    <select id="selectByNameId" resultMap="pmsLoginMap">
+        select * from pms_users where user_name = #{username} and password = #{password}
+    </select>
+
+</mapper>

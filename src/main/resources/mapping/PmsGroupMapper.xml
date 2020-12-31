@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：xml文件对应的接口类名-->
+<mapper namespace="com.buaa.pms.mapper.PmsGroupMapper">
+
+    <!--数据库表字段与Java对象属性的映射关系-->
+    <resultMap id="pmsGroupMap" type="PmsGroup">
+        <result property="groupUid" column="group_uid"/>
+        <result property="groupId" column="group_id"/>
+        <result property="groupName" column="group_name"/>
+        <result property="groupProcUid" column="group_proc_uid"/>
+        <result property="groupProjUid" column="group_proj_uid"/>
+    </resultMap>
+
+    <!--sql语句对应的接口方法名-->
+    <select id="selectAll" resultMap="pmsGroupMap">
+        select * from pms_group
+    </select>
+
+    <select id="selectByProjUid" resultMap="pmsGroupMap">
+        select * from pms_group where group_proj_uid = #{groupProjUid}
+    </select>
+
+    <select id="selectByProcUidList" resultMap="pmsGroupMap">
+        select * from pms_group where group_proc_uid in
+        <foreach collection="list" open="(" separator="," close=")" item="procUid">
+            #{procUid}
+        </foreach>
+    </select>
+
+    <select id="selectByProcUid" resultMap="pmsGroupMap">
+        select * from pms_group where group_proc_uid = #{groupProcUid}
+    </select>
+
+    <select id="selectByUid" resultMap="pmsGroupMap">
+        select * from pms_group where group_uid = #{groupUid}
+    </select>
+
+    <select id="selectByTaskUid" resultMap="pmsGroupMap">
+        select * from pms_group where group_id = #{groupId}
+    </select>
+
+    <insert id="save" parameterType="PmsGroup">
+        insert into pms_group
+        (group_uid, group_id, group_name, group_proc_uid, group_proj_uid)
+        values
+        (#{groupUid}, #{groupId}, #{groupName}, #{groupProcUid}, #{groupProjUid})
+    </insert>
+
+    <insert id="saveGroups" parameterType="java.util.List">
+        insert into pms_group
+        (group_uid, group_id, group_name, group_proc_uid, group_proj_uid)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{groupUid}, #{groupId}, #{groupName}, #{groupProcUid}, #{groupProjUid})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByUid">
+        delete from pms_group where group_uid = #{groupUid}
+    </delete>
+
+    <delete id="deleteByTaskUid">
+        delete from pms_group where group_id = #{groupId}
+    </delete>
+
+    <delete id="deleteByProcUid">
+        delete from pms_group where group_proc_uid = #{groupProcUid}
+    </delete>
+
+    <delete id="deleteByProjUid">
+        delete from pms_group where group_proj_uid = #{groupProjUid}
+    </delete>
+    
+    <update id="update" parameterType="PmsGroup">
+        update pms_group set
+        group_id = #{groupId}, group_name = #{groupName}, group_proc_uid = #{groupProcUid}, group_proj_uid = #{groupProjUid}
+        where group_uid = #{groupUid}
+    </update>
+
+    <update id="updateGroups" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update pms_group set
+            group_id = #{item.groupId}, group_name = #{item.groupName}, group_proc_uid = #{item.groupProcUid}, group_proj_uid = #{item.groupProjUid}
+            where group_uid = #{item.groupUid}
+        </foreach>
+    </update>
+
+</mapper>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：xml文件对应的接口类名-->
+<mapper namespace="com.buaa.pms.mapper.PmsProjectMapper">
+
+    <!--数据库表字段与Java对象属性的映射关系-->
+    <resultMap id="pmsProjectMap" type="PmsProject">
+        <result property="projUid" column="proj_uid"/>
+        <result property="projId" column="proj_id"/>
+        <result property="projName" column="proj_name"/>
+        <result property="projTaskUid" column="proj_task_uid"/>
+        <result property="projParUid" column="proj_par_uid"/>
+        <result property="projOrgUid" column="proj_org_uid"/>
+        <result property="projManager" column="proj_manager"/>
+        <result property="projDescription" column="proj_description"/>
+        <result property="projPriority" column="proj_priority"/>
+        <result property="projPlanStartDateTime" column="proj_plan_startdatetime"/>
+        <result property="projPlanFinishDateTime" column="proj_plan_finishdatetime"/>
+        <result property="projPlanDur" column="proj_plan_dur"/>
+        <result property="projEarlyStartDateTime" column="proj_early_startdatetime"/>
+        <result property="projLateFinishDateTime" column="proj_late_finishdatetime"/>
+        <result property="projActStartDateTime" column="proj_act_startdatetime"/>
+        <result property="projActFinishDateTime" column="proj_act_finishdatetime"/>
+        <result property="projActDur" column="proj_act_dur"/>
+        <result property="projWork" column="proj_work"/>
+        <result property="projCompWork" column="proj_comp_work"/>
+        <result property="projRemWork" column="proj_rem_work"/>
+        <result property="projPctWork" column="proj_pct_work"/>
+        <result property="projState" column="proj_state"/>
+    </resultMap>
+
+    <!--sql语句对应的接口方法名-->
+    <select id="selectAll" resultMap="pmsProjectMap">
+        select * from pms_project
+    </select>
+
+    <select id="selectTop" resultMap="pmsProjectMap">
+        select * from pms_project where proj_par_uid is null or proj_par_uid = ''
+    </select>
+
+    <select id="selectPublished" resultMap="pmsProjectMap">
+        select * from pms_project where proj_state in (1, 2, 3)
+    </select>
+
+    <select id="selectByParUid" resultMap="pmsProjectMap">
+        select * from pms_project where proj_par_uid = #{projParUid}
+    </select>
+
+    <select id="selectByUidList" resultMap="pmsProjectMap">
+        select * from pms_project where proj_uid in
+        <foreach collection="list" open="(" separator="," close=")" item="projUid">
+            #{projUid}
+        </foreach>
+    </select>
+
+    <select id="selectByUid" resultMap="pmsProjectMap">
+        select * from pms_project where proj_uid = #{projUid}
+    </select>
+
+    <insert id="save" parameterType="PmsProject">
+        insert into pms_project
+        (proj_uid, proj_id, proj_name, proj_task_uid, proj_par_uid, proj_org_uid, proj_manager, proj_description, proj_priority,
+        proj_plan_startdatetime, proj_plan_finishdatetime, proj_plan_dur, proj_early_startdatetime, proj_late_finishdatetime,
+        proj_act_startdatetime, proj_act_finishdatetime, proj_act_dur, proj_work, proj_comp_work, proj_rem_work, proj_pct_work, proj_state)
+        values
+        (#{projUid}, #{projId}, #{projName}, #{projTaskUid}, #{projParUid}, #{projOrgUid}, #{projManager}, #{projDescription}, #{projPriority},
+        #{projPlanStartDateTime}, #{projPlanFinishDateTime}, #{projPlanDur}, #{projEarlyStartDateTime}, #{projLateFinishDateTime},
+        #{projActStartDateTime}, #{projActFinishDateTime}, #{projActDur}, #{projWork}, #{projCompWork}, #{projRemWork}, #{projPctWork}, #{projState})
+    </insert>
+
+    <delete id="deleteByUid">
+        delete from pms_project where proj_uid = #{projUid}
+    </delete>
+    
+    <update id="update" parameterType="PmsProject">
+        update pms_project set
+        proj_id = #{projId}, proj_name = #{projName}, proj_task_uid = #{projTaskUid}, proj_par_uid = #{projParUid},
+        proj_org_uid = #{projOrgUid}, proj_manager = #{projManager}, proj_description = #{projDescription}, proj_priority = #{projPriority},
+        proj_plan_startdatetime = #{projPlanStartDateTime}, proj_plan_finishdatetime = #{projPlanFinishDateTime}, proj_plan_dur = #{projPlanDur},
+        proj_early_startdatetime = #{projEarlyStartDateTime}, proj_late_finishdatetime = #{projLateFinishDateTime}, proj_act_startdatetime = #{projActStartDateTime},
+        proj_act_finishdatetime = #{projActFinishDateTime}, proj_act_dur = #{projActDur}, proj_work = #{projWork}, proj_comp_work = #{projCompWork},
+        proj_rem_work = #{projRemWork}, proj_pct_work = #{projPctWork}, proj_state = #{projState}
+        where proj_uid = #{projUid}
+    </update>
+
+</mapper>

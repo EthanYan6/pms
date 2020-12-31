@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：xml文件对应的接口类名-->
+<mapper namespace="com.buaa.pms.mapper.PmsEquipmentMapper">
+
+    <!--数据库表字段与Java对象属性的映射关系-->
+    <resultMap id="pmsEquipmentMap" type="PmsEquipment">
+        <result property="equipUid" column="equip_uid"/>
+        <result property="equipId" column="equip_id"/>
+        <result property="equipName" column="equip_name"/>
+        <result property="equipOrgUid" column="equip_org_uid"/>
+        <result property="equipCapType" column="equip_cap_type"/>
+        <result property="equipCapLevel" column="equip_cap_level"/>
+        <result property="equipCapDesc" column="equip_cap_desc"/>
+    </resultMap>
+
+    <!--sql语句对应的接口方法名-->
+    <select id="selectAll" resultMap="pmsEquipmentMap">
+        select * from pms_equipment
+    </select>
+
+    <select id="selectByOrgUid" resultMap="pmsEquipmentMap">
+        select * from pms_equipment where equip_org_uid = #{equipOrgUid}
+    </select>
+
+    <select id="selectByUid" resultMap="pmsEquipmentMap">
+        select * from pms_equipment where equip_uid = #{equipUid}
+    </select>
+
+    <insert id="save" parameterType="PmsEquipment">
+        insert into pms_equipment
+        (equip_uid, equip_id, equip_name, equip_org_uid, equip_cap_type, equip_cap_level, equip_cap_desc)
+        values
+        (#{equipUid}, #{equipId}, #{equipName}, #{equipOrgUid}, #{equipCapType}, #{equipCapLevel}, #{equipCapDesc})
+    </insert>
+
+    <delete id="deleteByUid">
+        delete from pms_equipment where equip_uid = #{equipUid}
+    </delete>
+    
+    <update id="update" parameterType="PmsEquipment">
+        update pms_equipment set
+        equip_id = #{equipId}, equip_name = #{equipName}, equip_org_uid = #{equipOrgUid}, equip_cap_type = #{equipCapType},
+        equip_cap_level = #{equipCapLevel}, equip_cap_desc = #{equipCapDesc}
+        where equip_uid = #{equipUid}
+    </update>
+
+</mapper>
