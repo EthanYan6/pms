@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：xml文件对应的接口类名-->
+<mapper namespace="com.buaa.pms.mapper.PmsProcessMapper">
+
+    <!--数据库表字段与Java对象属性的映射关系-->
+    <resultMap id="pmsProcessMap" type="PmsProcess">
+        <result property="procUid" column="proc_uid"/>
+        <result property="procId" column="proc_id"/>
+        <result property="procName" column="proc_name"/>
+        <result property="procProjUid" column="proc_proj_uid"/>
+        <result property="procAuthor" column="proc_author"/>
+        <result property="procDescription" column="proc_description"/>
+        <result property="procPlanStartDateTime" column="proc_plan_startdatetime"/>
+        <result property="procPlanFinishDateTime" column="proc_plan_finishdatetime"/>
+        <result property="procPlanDur" column="proc_plan_dur"/>
+        <result property="procState" column="proc_state"/>
+    </resultMap>
+
+    <!--sql语句对应的接口方法名-->
+    <select id="selectAll" resultMap="pmsProcessMap">
+        select * from pms_process
+    </select>
+
+    <select id="selectPublished" resultMap="pmsProcessMap">
+        select * from pms_process where proc_state = 1
+    </select>
+
+    <select id="selectByProjUid" resultMap="pmsProcessMap">
+        select * from pms_process where proc_proj_uid = #{procProjUid}
+    </select>
+
+    <select id="selectByUidList" resultMap="pmsProcessMap" parameterType="java.util.List">
+        select * from pms_process where proc_uid in
+        <foreach collection="list" open="(" separator="," close=")" item="procUid">
+            #{procUid}
+        </foreach>
+    </select>
+
+    <select id="selectByUid" resultMap="pmsProcessMap">
+        select * from pms_process where proc_uid = #{procUid}
+    </select>
+
+    <insert id="save" parameterType="PmsProcess">
+        insert into pms_process
+        (proc_uid, proc_id, proc_name, proc_proj_uid, proc_author, proc_description,
+        proc_plan_startdatetime, proc_plan_finishdatetime, proc_plan_dur, proc_state)
+        values
+        (#{procUid}, #{procId}, #{procName}, #{procProjUid}, #{procAuthor}, #{procDescription},
+        #{procPlanStartDateTime}, #{procPlanFinishDateTime}, #{procPlanDur}, #{procState})
+    </insert>
+
+    <delete id="deleteByUid">
+        delete from pms_process where proc_uid = #{procUid}
+    </delete>
+
+    <delete id="deleteByProjUid">
+        delete from pms_process where proc_proj_uid = #{procProjUid}
+    </delete>
+    
+    <update id="update" parameterType="PmsProcess">
+        update pms_process set
+        proc_id = #{procId}, proc_name = #{procName}, proc_proj_uid = #{procProjUid}, proc_author = #{procAuthor},
+        proc_description = #{procDescription}, proc_plan_startdatetime = #{procPlanStartDateTime}, proc_plan_finishdatetime = #{procPlanFinishDateTime},
+        proc_plan_dur = #{procPlanDur}, proc_state = #{procState}
+        where proc_uid = #{procUid}
+    </update>
+
+</mapper>

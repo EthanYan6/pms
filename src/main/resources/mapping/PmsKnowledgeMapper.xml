@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：xml文件对应的接口类名-->
+<mapper namespace="com.buaa.pms.mapper.PmsKnowledgeMapper">
+
+    <!--数据库表字段与Java对象属性的映射关系-->
+    <resultMap id="pmsKnowledgeMap" type="PmsKnowledge">
+        <result property="knowlUid" column="knowl_uid"/>
+        <result property="knowlId" column="knowl_id"/>
+        <result property="knowlName" column="knowl_name"/>
+        <result property="knowlOrgUid" column="knowl_org_uid"/>
+        <result property="knowlType" column="knowl_type"/>
+        <result property="knowlAmount" column="knowl_amount"/>
+        <result property="knowlDesc" column="knowl_desc"/>
+    </resultMap>
+
+    <!--sql语句对应的接口方法名-->
+    <select id="selectAll" resultMap="pmsKnowledgeMap">
+        select * from pms_knowledge
+    </select>
+
+    <select id="selectByOrgUid" resultMap="pmsKnowledgeMap">
+        select * from pms_knowledge where knowl_org_uid = #{knowlOrgUid}
+    </select>
+
+    <select id="selectByUid" resultMap="pmsKnowledgeMap">
+        select * from pms_knowledge where knowl_uid = #{knowlUid}
+    </select>
+
+    <insert id="save" parameterType="PmsKnowledge">
+        insert into pms_knowledge
+        (knowl_uid, knowl_id, knowl_name, knowl_org_uid, knowl_type, knowl_amount, knowl_desc)
+        values
+        (#{knowlUid}, #{knowlId}, #{knowlName}, #{knowlOrgUid}, #{knowlType}, #{knowlAmount}, #{knowlDesc})
+    </insert>
+
+    <delete id="deleteByUid">
+        delete from pms_knowledge where knowl_uid = #{knowlUid}
+    </delete>
+    
+    <update id="update" parameterType="PmsKnowledge">
+        update pms_knowledge set
+        knowl_id = #{knowlId}, knowl_name = #{knowlName}, knowl_org_uid = #{knowlOrgUid}, knowl_type = #{knowlType},
+        knowl_amount = #{knowlAmount}, knowl_desc = #{knowlDesc}
+        where knowl_uid = #{knowlUid}
+    </update>
+
+</mapper>

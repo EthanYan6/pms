@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：xml文件对应的接口类名-->
+<mapper namespace="com.buaa.pms.mapper.PmsHumanMapper">
+
+    <!--数据库表字段与Java对象属性的映射关系-->
+    <resultMap id="pmsHumanMap" type="PmsHuman">
+        <result property="humUid" column="hum_uid"/>
+        <result property="humId" column="hum_id"/>
+        <result property="humName" column="hum_name"/>
+        <result property="humOrgUid" column="hum_org_uid"/>
+        <result property="humPosition" column="hum_position"/>
+        <result property="humAbilityType" column="hum_ability_type"/>
+        <result property="humAbilityLevel" column="hum_ability_level"/>
+        <result property="humAbilityDesc" column="hum_ability_desc"/>
+        <result property="humPhone" column="hum_phone"/>
+        <result property="humEmail" column="hum_email"/>
+    </resultMap>
+
+    <!--sql语句对应的接口方法名-->
+    <select id="selectAll" resultMap="pmsHumanMap">
+        select * from pms_human
+    </select>
+
+    <select id="selectByOrgUid" resultMap="pmsHumanMap">
+        select * from pms_human where hum_org_uid = #{humOrgUid}
+    </select>
+
+    <select id="selectByUid" resultMap="pmsHumanMap">
+        select * from pms_human where hum_uid = #{humUid}
+    </select>
+
+    <insert id="save" parameterType="PmsHuman">
+        insert into pms_human
+        (hum_uid, hum_id, hum_name, hum_org_uid, hum_position, hum_ability_type, hum_ability_level, hum_ability_desc, hum_phone, hum_email)
+        values
+        (#{humUid}, #{humId}, #{humName}, #{humOrgUid}, #{humPosition}, #{humAbilityType}, #{humAbilityLevel}, #{humAbilityDesc}, #{humPhone}, #{humEmail})
+    </insert>
+
+    <delete id="deleteByUid">
+        delete from pms_human where hum_uid = #{humUid}
+    </delete>
+    
+    <update id="update" parameterType="PmsHuman">
+        update pms_human set
+        hum_id = #{humId}, hum_name = #{humName}, hum_org_uid = #{humOrgUid}, hum_position = #{humPosition}, hum_ability_type = #{humAbilityType},
+        hum_ability_level = #{humAbilityLevel}, hum_ability_desc = #{humAbilityDesc}, hum_phone = #{humPhone}, hum_email = #{humEmail}
+        where hum_uid = #{humUid}
+    </update>
+
+</mapper>

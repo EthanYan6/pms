@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：xml文件对应的接口类名-->
+<mapper namespace="com.buaa.pms.mapper.PmsTaskMapper">
+
+    <!--数据库表字段与Java对象属性的映射关系-->
+    <resultMap id="pmsTaskMap" type="PmsTask">
+        <result property="taskUid" column="task_uid"/>
+        <result property="taskId" column="task_id"/>
+        <result property="taskName" column="task_name"/>
+        <result property="taskType" column="task_type"/>
+        <result property="taskInType" column="task_in_type"/>
+        <result property="taskOutType" column="task_out_type"/>
+        <result property="taskProjUid" column="task_proj_uid"/>
+        <result property="taskProcUid" column="task_proc_uid"/>
+        <result property="taskParUid" column="task_par_uid"/>
+        <result property="taskManager" column="task_manager"/>
+        <result property="taskDescription" column="task_description"/>
+        <result property="taskPriority" column="task_priority"/>
+        <result property="taskPlanStartDateTime" column="task_plan_startdatetime"/>
+        <result property="taskPlanFinishDateTime" column="task_plan_finishdatetime"/>
+        <result property="taskPlanDur" column="task_plan_dur"/>
+        <result property="taskEarlyStartDateTime" column="task_early_startdatetime"/>
+        <result property="taskLateFinishDateTime" column="task_late_finishdatetime"/>
+        <result property="taskActStartDateTime" column="task_act_startdatetime"/>
+        <result property="taskActFinishDateTime" column="task_act_finishdatetime"/>
+        <result property="taskActDur" column="task_act_dur"/>
+        <result property="taskWork" column="task_work"/>
+        <result property="taskCompWork" column="task_comp_work"/>
+        <result property="taskRemWork" column="task_rem_work"/>
+        <result property="taskPctWork" column="task_pct_work"/>
+        <result property="taskWorkModel" column="task_work_model"/>
+        <result property="taskState" column="task_state"/>
+    </resultMap>
+
+    <!--sql语句对应的接口方法名-->
+    <select id="selectAll" resultMap="pmsTaskMap">
+        select * from pms_task
+    </select>
+
+    <select id="selectByProjUid" resultMap="pmsTaskMap">
+        select * from pms_task where task_proj_uid = #{taskProjUid}  order by task_id
+    </select>
+
+    <select id="selectByProcUidList" resultMap="pmsTaskMap">
+        select * from pms_task where task_proc_uid in
+        <foreach collection="list" open="(" separator="," close=")" item="procUid">
+            #{procUid}
+        </foreach>
+    </select>
+
+    <select id="selectByProcUid" resultMap="pmsTaskMap">
+        select * from pms_task where task_proc_uid = #{taskProcUid} order by task_id
+    </select>
+
+    <select id="selectByParUid" resultMap="pmsTaskMap">
+        select * from pms_task where task_par_uid = #{taskParUid}
+    </select>
+
+    <select id="selectByUidList" resultMap="pmsTaskMap" parameterType="java.util.List">
+        select * from pms_task where task_uid in
+        <foreach collection="list" open="(" separator="," close=")" item="taskUid">
+            #{taskUid}
+        </foreach>
+    </select>
+
+    <select id="selectByUid" resultMap="pmsTaskMap">
+        select * from pms_task where task_uid = #{taskUid}
+    </select>
+
+    <insert id="save" parameterType="PmsTask">
+        insert into pms_task
+        (task_uid, task_id, task_name, task_type, task_in_type, task_out_type, task_proj_uid, task_proc_uid, task_par_uid, task_manager,
+        task_description, task_priority, task_plan_startdatetime, task_plan_finishdatetime, task_plan_dur, task_early_startdatetime, task_late_finishdatetime,
+        task_act_startdatetime, task_act_finishdatetime, task_act_dur, task_work, task_comp_work, task_rem_work, task_pct_work, task_work_model, task_state)
+        values
+        (#{taskUid}, #{taskId}, #{taskName}, #{taskType}, #{taskInType}, #{taskOutType}, #{taskProjUid}, #{taskProcUid}, #{taskParUid}, #{taskManager},
+        #{taskDescription}, #{taskPriority}, #{taskPlanStartDateTime}, #{taskPlanFinishDateTime}, #{taskPlanDur}, #{taskEarlyStartDateTime}, #{taskLateFinishDateTime},
+        #{taskActStartDateTime}, #{taskActFinishDateTime}, #{taskActDur}, #{taskWork}, #{taskCompWork}, #{taskRemWork}, #{taskPctWork}, #{taskWorkModel}, #{taskState})
+    </insert>
+
+    <delete id="deleteByUid">
+        delete from pms_task where task_uid = #{taskUid}
+    </delete>
+
+    <delete id="deleteByProjUid">
+        delete from pms_task where task_proj_uid = #{taskProjUid}
+    </delete>
+
+    <delete id="deleteByProcUid">
+        delete from pms_task where task_proc_uid = #{taskProcUid}
+    </delete>
+
+    <delete id="deleteByParUid">
+        delete from pms_task where task_par_uid = #{taskParUid}
+    </delete>
+    
+    <update id="update" parameterType="PmsTask">
+        update pms_task set
+        task_id = #{taskId}, task_name = #{taskName}, task_type = #{taskType}, task_in_type = #{taskInType}, task_out_type = #{taskOutType},
+        task_proj_uid = #{taskProjUid}, task_proc_uid = #{taskProcUid}, task_par_uid = #{taskParUid}, task_manager = #{taskManager},
+        task_description = #{taskDescription}, task_priority = #{taskPriority}, task_plan_startdatetime = #{taskPlanStartDateTime}, task_plan_finishdatetime = #{taskPlanFinishDateTime},
+        task_plan_dur = #{taskPlanDur}, task_early_startdatetime = #{taskEarlyStartDateTime}, task_late_finishdatetime = #{taskLateFinishDateTime},
+        task_act_startdatetime = #{taskActStartDateTime}, task_act_finishdatetime = #{taskActFinishDateTime}, task_act_dur = #{taskActDur},
+        task_work = #{taskWork}, task_comp_work = #{taskCompWork}, task_rem_work = #{taskRemWork}, task_pct_work = #{taskPctWork},
+        task_work_model = #{taskWorkModel}, task_state = #{taskState}
+        where task_uid = #{taskUid}
+    </update>
+
+    <update id="updatePriorityByProj" parameterType="PmsProject">
+        update pms_task set
+        task_priority = #{projPriority}
+        where task_proj_uid = #{projUid}
+    </update>
+
+    <update id="updatePmsTaskIds" parameterType="java.util.List">
+        <foreach collection="list" item="pmsTask" index="index" open="" close="" separator=";">
+            update pms_task set task_id = #{pmsTask.taskId} where task_uid = #{pmsTask.taskUid}
+        </foreach>
+    </update>
+
+    <update id="updatePmsTasks" parameterType="java.util.List">
+        <foreach collection="list" item="pmsTask" index="index" open="" close="" separator=";">
+            update pms_task set
+            task_id = #{pmsTask.taskId}, task_name = #{pmsTask.taskName}, task_type = #{pmsTask.taskType}, task_in_type = #{pmsTask.taskInType},
+            task_out_type = #{pmsTask.taskOutType}, task_proj_uid = #{pmsTask.taskProjUid}, task_proc_uid = #{pmsTask.taskProcUid},
+            task_par_uid = #{pmsTask.taskParUid}, task_manager = #{pmsTask.taskManager}, task_description = #{pmsTask.taskDescription},
+            task_priority = #{pmsTask.taskPriority}, task_plan_startdatetime = #{pmsTask.taskPlanStartDateTime}, task_plan_finishdatetime = #{pmsTask.taskPlanFinishDateTime},
+            task_plan_dur = #{pmsTask.taskPlanDur}, task_early_startdatetime = #{pmsTask.taskEarlyStartDateTime}, task_late_finishdatetime = #{pmsTask.taskLateFinishDateTime},
+            task_act_startdatetime = #{pmsTask.taskActStartDateTime}, task_act_finishdatetime = #{pmsTask.taskActFinishDateTime}, task_act_dur = #{pmsTask.taskActDur},
+            task_work = #{pmsTask.taskWork}, task_comp_work = #{pmsTask.taskCompWork}, task_rem_work = #{pmsTask.taskRemWork}, task_pct_work = #{pmsTask.taskPctWork},
+            task_work_model = #{pmsTask.taskWorkModel}, task_state = #{pmsTask.taskState}
+            where task_uid = #{pmsTask.taskUid}
+        </foreach>
+    </update>
+
+</mapper>

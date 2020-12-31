@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：xml文件对应的接口类名-->
+<mapper namespace="com.buaa.pms.mapper.PmsOrganizationMapper">
+
+    <!--数据库表字段与Java对象属性的映射关系-->
+    <resultMap id="pmsOrganizationMap" type="PmsOrganization">
+        <result property="orgUid" column="org_uid"/>
+        <result property="orgId" column="org_id"/>
+        <result property="orgName" column="org_name"/>
+        <result property="orgParUid" column="org_par_uid"/>
+        <result property="orgManager" column="org_manager"/>
+        <result property="orgPhone" column="org_phone"/>
+        <result property="orgEmail" column="org_email"/>
+        <result property="orgAddress" column="org_address"/>
+        <result property="orgDescription" column="org_description"/>
+    </resultMap>
+
+    <!--sql语句对应的接口方法名-->
+    <select id="selectAll" resultMap="pmsOrganizationMap">
+        select * from pms_organization
+    </select>
+
+    <select id="selectTop" resultMap="pmsOrganizationMap">
+        select * from pms_organization where org_par_uid = '' or org_par_uid is null
+    </select>
+
+    <select id="selectByParUid" resultMap="pmsOrganizationMap">
+        select * from pms_organization where org_par_uid = #{orgParUid}
+    </select>
+
+    <select id="selectByUid" resultMap="pmsOrganizationMap">
+        select * from pms_organization where org_uid = #{orgUid}
+    </select>
+
+    <insert id="save" parameterType="PmsOrganization">
+        insert into pms_organization
+        (org_uid, org_id, org_name, org_par_uid, org_manager, org_phone, org_email, org_address, org_description)
+        values
+        (#{orgUid}, #{orgId}, #{orgName}, #{orgParUid}, #{orgManager}, #{orgPhone}, #{orgEmail}, #{orgAddress}, #{orgDescription})
+    </insert>
+
+    <delete id="deleteByUid">
+        delete from pms_organization where org_uid = #{orgUid}
+    </delete>
+    
+    <update id="update" parameterType="PmsOrganization">
+        update pms_organization set
+        org_id = #{orgId}, org_name = #{orgName}, org_par_uid = #{orgParUid}, org_manager = #{orgManager},
+        org_phone = #{orgPhone}, org_email = #{orgEmail}, org_address = #{orgAddress}, org_description = #{orgDescription}
+        where org_uid = #{orgUid}
+    </update>
+
+</mapper>

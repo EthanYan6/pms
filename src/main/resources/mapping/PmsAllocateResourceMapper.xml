@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace：xml文件对应的接口类名-->
+<mapper namespace="com.buaa.pms.mapper.PmsAllocateResourceMapper">
+
+    <!--数据库表字段与Java对象属性的映射关系-->
+    <resultMap id="pmsAllocateResourceMap" type="PmsAllocateResource">
+        <result property="arUid" column="ar_uid"/>
+        <result property="arResUid" column="ar_res_uid"/>
+        <result property="arProjUid" column="ar_proj_uid"/>
+        <result property="arProcUid" column="ar_proc_uid"/>
+        <result property="arTaskUid" column="ar_task_uid"/>
+        <result property="arResPlanUid" column="ar_resplan_uid"/>
+        <result property="arResReqUid" column="ar_resreq_uid"/>
+        <result property="arResStartDateTime" column="ar_res_startdatetime"/>
+        <result property="arResFinishDateTime" column="ar_res_finishdatetime"/>
+        <result property="arResWork" column="ar_res_work"/>
+        <result property="arResWorkModel" column="ar_res_workmodel"/>
+        <result property="arResAmount" column="ar_res_amount"/>
+        <result property="arIsEffective" column="ar_iseffective"/>
+    </resultMap>
+
+    <!--sql语句对应的接口方法名-->
+    <select id="selectAll" resultMap="pmsAllocateResourceMap">
+        select * from pms_allocate_resource
+    </select>
+
+    <select id="selectByProjUid" resultMap="pmsAllocateResourceMap">
+        select * from pms_allocate_resource where ar_proj_uid = #{arProjUid}
+    </select>
+
+    <select id="selectByProcUid" resultMap="pmsAllocateResourceMap">
+        select * from pms_allocate_resource where ar_proc_uid = #{arProcUid}
+    </select>
+
+    <select id="selectByTaskUid" resultMap="pmsAllocateResourceMap">
+        select * from pms_allocate_resource where ar_task_uid = #{arTaskUid}
+    </select>
+
+    <select id="selectByResUid" resultMap="pmsAllocateResourceMap">
+        select * from pms_allocate_resource where ar_res_uid = #{arResUid}
+    </select>
+
+    <select id="selectByResUidList" resultMap="pmsAllocateResourceMap" parameterType="java.util.List">
+        select * from pms_allocate_resource where ar_res_uid in
+        <foreach collection="list" open="(" separator="," close=")" item="resUid">
+            #{resUid}
+        </foreach>
+    </select>
+
+    <select id="selectByUid" resultMap="pmsAllocateResourceMap">
+        select * from pms_allocate_resource where ar_uid = #{arUid}
+    </select>
+
+    <insert id="save" parameterType="PmsAllocateResource">
+        insert into pms_allocate_resource
+        (ar_uid, ar_res_uid, ar_proj_uid, ar_proc_uid, ar_task_uid, ar_resplan_uid, ar_resreq_uid, ar_res_startdatetime,
+        ar_res_finishdatetime, ar_res_work, ar_res_workmodel, ar_res_amount, ar_iseffective)
+        values
+        (#{arUid}, #{arResUid}, #{arProjUid}, #{arProcUid}, #{arTaskUid}, #{arResPlanUid}, #{arResReqUid}, #{arResStartDateTime},
+        #{arResFinishDateTime}, #{arResWork}, #{arResWorkModel}, #{arResAmount}, #{arIsEffective})
+    </insert>
+
+    <delete id="deleteByUid">
+        delete from pms_allocate_resource where ar_uid = #{arUid}
+    </delete>
+
+    <delete id="deleteByTaskUid">
+        delete from pms_allocate_resource where ar_task_uid = #{arTaskUid}
+    </delete>
+
+    <delete id="deleteByProcUid">
+        delete from pms_allocate_resource where ar_proc_uid = #{arProcUid}
+    </delete>
+
+    <delete id="deleteByProjUid">
+        delete from pms_allocate_resource where ar_proj_uid = #{arProjUid}
+    </delete>
+
+    <update id="update" parameterType="PmsAllocateResource">
+        update pms_allocate_resource set
+        ar_res_uid = #{arResUid}, ar_proj_uid = #{arProjUid}, ar_proc_uid = #{arProcUid}, ar_task_uid = #{arTaskUid},
+        ar_resplan_uid = #{arResPlanUid}, ar_resreq_uid = #{arResReqUid}, ar_res_startdatetime = #{arResStartDateTime},
+        ar_res_finishdatetime = #{arResFinishDateTime}, ar_res_work = #{arResWork}, ar_res_workmodel = #{arResWorkModel},
+        ar_res_amount = #{arResAmount}, ar_iseffective = #{arIsEffective}
+        where ar_uid = #{arUid}
+    </update>
+
+</mapper>
