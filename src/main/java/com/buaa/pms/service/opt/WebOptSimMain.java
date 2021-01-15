@@ -350,7 +350,7 @@ public class WebOptSimMain {
         // 初始化“资源方案-资源需求”resPlanResReqMap
         // 初始化相关资源的已占用情况resOcpyNodeMapOrig
         for (PmsTaskResReq pmsTaskResReq : pmsTaskResReqList) {
-            resOcpyNodeMapOrig.put(pmsTaskResReq.getResReqResUid(), new ResOcpyNode(new Timestamp(0), new Timestamp(0)));
+            resOcpyNodeMapOrig.put(pmsTaskResReq.getResReqResUid(), new ResOcpyNode(new Timestamp  (0), new Timestamp(0)));
             String resPlanUid = pmsTaskResReq.getResReqResPlanUid();
             if (!resPlanResReqMap.containsKey(resPlanUid)) {
                 resPlanResReqMap.put(resPlanUid, new LinkedList<PmsTaskResReq>());
@@ -364,13 +364,35 @@ public class WebOptSimMain {
         });
         Map<String, ResOcpyNode> arListTailMap = new HashMap<>(resOcpyNodeMapOrig);     // 记录resOcpyNodeMapOrig的value中的list的尾结点，以便插入新节点
         for (PmsAllocateResource pmsAllocateResource : pmsAllocateResourceList) {
-            if (pmsAllocateResource.getArResStartDateTime().after(optOrigin) || pmsAllocateResource.getArResFinishDateTime().before(optDestination))
+//            if (pmsAllocateResource.getArResStartDateTime().after(optOrigin) || pmsAllocateResource.getArResFinishDateTime().before(optDestination))
+            //这里要考虑延期情况，所以完成时间不应该加
+            if (pmsAllocateResource.getArResFinishDateTime().before(optOrigin))
                 continue;   // 不再此次优化的时间段之内的占用就忽略
             String resUid = pmsAllocateResource.getArResUid();
             ResOcpyNode newResOcpyNode = new ResOcpyNode(pmsAllocateResource);
-            arListTailMap.get(resUid).sucOcpy = newResOcpyNode;
-            arListTailMap.put(resUid, newResOcpyNode);
+            //arListTailMap.get(resUid).sucOcpy = newResOcpyNode;
+            //这里有一个虚拟头元素，所以不应该直接Put 应该是Bug
+            //chen
+            ResOcpyNode origNode=new ResOcpyNode();
+            ResOcpyNode newNode=new ResOcpyNode();
+            if (resOcpyNodeMapOrig.get(resUid).sucOcpy!=null){
+                origNode = resOcpyNodeMapOrig.get(resUid);
+                newNode = new ResOcpyNode(origNode);
+                while (origNode.sucOcpy != null) {
+                    origNode = origNode.sucOcpy;
+                    newNode.sucOcpy = new ResOcpyNode(origNode);
+                    newNode.sucOcpy.preOcpy = newNode;
+                    newNode = newNode.sucOcpy;
+                }
+                origNode.sucOcpy= newResOcpyNode;
+            }else
+            {
+                resOcpyNodeMapOrig.get(resUid).sucOcpy=newResOcpyNode;
+            }
+
+//            arListTailMap.put(resUid, newResOcpyNode);
         }
+
         Iterator<Map.Entry<String, ResOcpyNode>> it = resOcpyNodeMapOrig.entrySet().iterator();
         while(it.hasNext()) {
             Map.Entry<String, ResOcpyNode> entry = it.next();
@@ -1341,7 +1363,7 @@ public class WebOptSimMain {
         return optResult;
     }
 
-    public JSONObject optResult(JSONObject info) {
+    public com.alibaba.fastjson.JSONObject optResult(JSONObject info) {
         List<PmsTask> pmsTaskList = webOptimize(info);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         for (PmsTask pmsTask : pmsTaskList) {
@@ -1373,6 +1395,11 @@ public class WebOptSimMain {
                 resAr.put("resNo", resUid);
                 resAr.put("planStart", resOcpyNode.getResStartDateTime().getTime());
                 resAr.put("planEnd", resOcpyNode.getResFinishDateTime().getTime());
+                //有可能取空，所以要有一个判断
+                if(resOcpyNode.getPmsTaskResReq() == null){
+                    resOcpyNode = resOcpyNode.sucOcpy;
+                    continue;
+                }
                 String taskUid = resPlanTaskMap.get(resOcpyNode.getPmsTaskResReq().getResReqResPlanUid());
                 taskUidResPlanUidMap.put(taskUid, resOcpyNode.getPmsTaskResReq().getResReqResPlanUid());
                 if (resArMap.containsKey(taskUid)) {
@@ -1397,7 +1424,7 @@ public class WebOptSimMain {
             nodeTask.put("resList", resArMap.get(taskUid));
             nodeTaskList.add(nodeTask);
         }
-        JSONObject result = new JSONObject();
+        com.alibaba.fastjson.JSONObject result = new com.alibaba.fastjson.JSONObject();
         result.put("nodeTask", nodeTaskList);
         result.put("simData", simData());
         return result;

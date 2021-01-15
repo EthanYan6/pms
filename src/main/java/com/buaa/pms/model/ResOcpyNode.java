@@ -37,7 +37,9 @@ public class ResOcpyNode {
     public ResOcpyNode(PmsAllocateResource pmsAllocateResource) {
         this.pmsAllocateResource = pmsAllocateResource;
         this.resStartDateTime = pmsAllocateResource.getArResStartDateTime();
-        this.resFinishDateTime = pmsAllocateResource.getArResStartDateTime();
+        //BUG2#
+//        this.resFinishDateTime = pmsAllocateResource.getArResStartDateTime();
+        this.resFinishDateTime = pmsAllocateResource.getArResFinishDateTime();
         this.resUid = pmsAllocateResource.getArResUid();
         this.resAmount = pmsAllocateResource.getArResAmount();
         this.resWork = pmsAllocateResource.getArResWork();
