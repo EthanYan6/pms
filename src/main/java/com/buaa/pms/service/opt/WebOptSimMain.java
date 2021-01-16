@@ -371,7 +371,7 @@ public class WebOptSimMain {
             String resUid = pmsAllocateResource.getArResUid();
             ResOcpyNode newResOcpyNode = new ResOcpyNode(pmsAllocateResource);
             //arListTailMap.get(resUid).sucOcpy = newResOcpyNode;
-            //这里有一个虚拟头元素，所以不应该直接Put 应该是Bug
+            //这里有一个虚拟头元素，所以不应该直接Put 应该是Bug Bug#2
             //chen
             ResOcpyNode origNode=new ResOcpyNode();
             ResOcpyNode newNode=new ResOcpyNode();
@@ -1395,7 +1395,7 @@ public class WebOptSimMain {
                 resAr.put("resNo", resUid);
                 resAr.put("planStart", resOcpyNode.getResStartDateTime().getTime());
                 resAr.put("planEnd", resOcpyNode.getResFinishDateTime().getTime());
-                //有可能取空，所以要有一个判断
+                //有可能取空，所以要有一个判断 BUG#3
                 if(resOcpyNode.getPmsTaskResReq() == null){
                     resOcpyNode = resOcpyNode.sucOcpy;
                     continue;

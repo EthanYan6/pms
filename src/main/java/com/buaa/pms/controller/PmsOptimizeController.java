@@ -46,14 +46,13 @@ public class PmsOptimizeController {
     }
 
     @RequestMapping("/testOptResult")
-    public JSONObject testOptResult(@RequestBody JSONObject info) {
+    public com.alibaba.fastjson.JSONObject testOptResult(@RequestBody JSONObject info) {
         JSONUtils.getMorpherRegistry().registerMorpher(new TimestampMorpher());     // 注册时间转换方式，Long转Timestamp
         return webOptSimMain.optResult(info);
     }
 
     /**
      * 差分进化算法，计划优化，接收外部平台数据并返回计划信息
-     * @path: /pms/projOpt/webOptResult
      * @param info
      * @return
      */

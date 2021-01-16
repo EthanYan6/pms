@@ -2,9 +2,10 @@ package com.buaa.pms.model;
 
 import com.buaa.pms.entity.PmsGroup;
 import com.buaa.pms.entity.PmsTask;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Task {
 
     private PmsTask pmsTask;
