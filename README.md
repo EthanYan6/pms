@@ -269,15 +269,15 @@ POST
 ```json
 "nodeTask": [
     {
-      "taskNo": 任务编号,
-      "planStart": 任务计划开始时间(Long),
-      "planEnd": 任务计划结束时间(Long),
-      "planNo": 任务选择的资源方案的编号(String),
-      "resList": [
-        "resNo": 任务占用的资源的编号(String),
-        "planStart": 资源占用开始时间(Long),
-        "planEnd": 资源占用结束时间(Long),
-      ]
+      "taskNo": "任务编号",
+      "planStart": "任务计划开始时间(Long)",
+      "planEnd": "任务计划结束时间(Long)",
+      "planNo": "任务选择的资源方案的编号(String)",
+      "resList": [{
+        "resNo": "任务占用的资源的编号(String)",
+        "planStart": "资源占用开始时间(Long)",
+        "planEnd": "资源占用结束时间(Long)",
+      }...]
     }
 ]
 ```
